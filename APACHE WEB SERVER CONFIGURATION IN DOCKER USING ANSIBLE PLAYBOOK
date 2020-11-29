@@ -1,0 +1,50 @@
+
+- hosts: all
+  tasks:
+  - name: "Docker Repository"
+    yum_repository:
+        name: present
+        baseurl: "https://download.docker.com/linux/centos/7/x86_64/stable/"
+        gpgcheck: no
+        description: "Docker Repo"
+
+  
+  - name: "installing docker CE version"
+    command:
+        cmd: "yum install docker-ce --nobest -y"
+        warn: no
+ 
+  - name: "Starting docker services"
+    service: 
+        name: "docker"
+        state: started
+        enabled: yes
+
+  - name: "Installing Pyhton sdk for docker"  
+    command: "pip3 install docker"
+
+  - name: "Download docker httpd image"
+    docker_image:
+        name: httpd
+        tag: latest
+        source: pull
+  - name: "Copy web pages to document root"
+    copy:
+        src: "web.html"
+        dest: "/var/www/html/index.html"
+ 
+  - name: "Launching Docker Httpd container"
+    docker_container:
+        name: "Dockerweb1"
+        image: httpd
+        state: started
+        exposed_ports: "80"
+        ports: "8080:80"
+        volumes:
+        - /var/www/html:/usr/local/apache2/htdocs/
+
+  - firewalld:
+        port: "8008/tcp"
+        state: enabled
+        permanent: yes
+        immediate: yes
