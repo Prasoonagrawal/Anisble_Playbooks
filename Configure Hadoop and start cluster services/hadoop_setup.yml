@@ -1,0 +1,96 @@
+
+ - hosts: namenode
+   vars_files:
+     hadoop_variable_for_namenode.yml
+         
+         
+   tasks: 
+     - name: "Copying hadoop software"
+       copy:
+         src: "/root/software/hadoop-1.2.1-1.x86_64.rpm"
+         dest: "/root/"
+
+     - name: "Copying Java software"
+       copy:
+         src: "/root/software/jdk-8u171-linux-x64.rpm"
+         dest: "/root/"
+
+     - name: "Installing hadoop"
+       command:
+          cmd: "rpm -i /root/hadoop-1.2.1-1.x86_64.rpm --force"
+          warn: no  
+     - name: "Installing JDK"
+       yum:
+          name: '/root/jdk-8u171-linux-x64.rpm'
+          state: present
+          disable_gpg_check: yes
+
+     - name: "Copying hdfs and core file on master"
+       block:
+          - template:
+               src: "hdfs-site.xml"
+               dest: "/etc/hadoop"
+          - template:
+               src: "core-site.xml"
+               dest: "/etc/hadoop"
+          - file: 
+              path: "/{{ node }}_dir"
+              state: directory
+
+     - name: "Formating master node"
+       command:
+         cmd: "hadoop namenode  -format -force"
+  
+  
+    
+     - name: "Starting namenode"
+       command:
+         cmd: "hadoop-daemon.sh start namenode "
+         warn: no
+
+
+
+ - hosts: datanode
+   vars_files:
+     hadoop_variable_for_datanode.yml
+         
+         
+   tasks: 
+     - name: "Copying hadoop software"
+       copy:
+         src: "/root/software/hadoop-1.2.1-1.x86_64.rpm"
+         dest: "/root/"
+
+     - name: "Copying Java software"
+       copy:
+         src: "/root/software/jdk-8u171-linux-x64.rpm"
+         dest: "/root/"
+
+     - name: "Installing hadoop"
+       command:
+          cmd: "rpm -i /root/hadoop-1.2.1-1.x86_64.rpm --force"
+          warn: no  
+     - name: "Installing JDK"
+       yum:
+          name: '/root/jdk-8u171-linux-x64.rpm'
+          state: present
+          disable_gpg_check: yes
+
+     - name: "Copying hdfs and core file on master"
+       block:
+          - template:
+               src: "hdfs-site.xml"
+               dest: "/etc/hadoop"
+          - template:
+               src: "core-site.xml"
+               dest: "/etc/hadoop"
+          - file: 
+              path: "/{{ node }}_dir"
+              state: directory
+
+     - name: "Staring datanode"
+       command:
+          cmd: "hadoop-daemon.sh start datanode"
+          warn: no  
+
+
