@@ -1,0 +1,46 @@
+ - hosts: all
+   tasks:
+    - name: "Stoping firewalld"
+      shell: systemctl stop firewalld
+    - name: "Stoping SElinux"
+      shell: "setenforce 0"
+
+ - hosts: WEB
+   tasks:
+    - name: "Intalling HTTP package"
+      package:
+         name: httpd
+    - name: "Intalling PHP package"
+      package:
+         name: php
+    - name: "coping code"
+      copy:
+         dest: "/var/www/html/index.php"
+         content: "<pre>\n<?php\n\nprint `/usr/sbin/ifconfig`\n\n?>\n</pre>"
+
+    - name: Strating httpd service
+      service: 
+         name: httpd
+         state: restarted      
+
+ - hosts: LB
+   vars_files:
+           variable.yml
+   tasks:
+     - name: "Installing Haproxy"
+       package:
+          name: haproxy
+     - name: "Coping haproxy confrigration file"
+       template:
+          dest: "/etc/haproxy/haproxy.cfg"
+          src: haproxy.cfg.j2
+
+     - name: "Starting haproxyservices"
+       service:
+          name: haproxy
+          state: restarted
+
+          
+
+
+ 
