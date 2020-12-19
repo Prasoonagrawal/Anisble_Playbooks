@@ -1,0 +1,17 @@
+- hosts: all
+  vars_files:
+    - "{{ ansible_facts['distribution'] }}-{{ ansible_facts['distribution_major_version'] }}"
+  tasks:
+  - name: Installing  apache software
+    package:
+       name: "{{ package }}"
+
+  - name: Copy Webpage
+    template:
+        dest: "{{ document_root }}"
+        src: web.html
+
+  - name: Staring Web service
+    service:
+        name: "{{ service_name}}"
+        state: started 
