@@ -1,0 +1,6 @@
+- hosts: LB
+  roles:
+    - role: "load_blancer"
+- hosts: WEB
+  roles:
+     - role: "httpd"
