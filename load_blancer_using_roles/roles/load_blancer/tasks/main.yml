@@ -1,0 +1,12 @@
+---
+# tasks file for load_blancer
+
+- package:
+      name: "{{ software_name }}"
+      state: present
+- template:
+      dest: "/etc/haproxy/haproxy.cfg"
+      src: "haproxy.cfg"
+- service:
+     name: "{{ service_name }}"
+     state: started

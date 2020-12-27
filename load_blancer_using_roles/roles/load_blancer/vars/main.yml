@@ -1,0 +1,5 @@
+---
+# vars file for load_blancer
+software_name: haproxy
+service_name: haproxy
+port: 8080

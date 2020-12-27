@@ -1,0 +1,5 @@
+---
+# handlers file for load_blancer
+- service:
+     name: "{{ software_name }}"
+     state: restarted

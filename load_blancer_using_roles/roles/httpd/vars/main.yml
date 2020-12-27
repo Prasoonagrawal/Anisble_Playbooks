@@ -1,0 +1,5 @@
+---
+# vars file for httpd
+
+software_name: httpd
+service_name: httpd
