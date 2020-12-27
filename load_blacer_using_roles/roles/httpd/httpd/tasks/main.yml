@@ -1,0 +1,13 @@
+---
+# tasks file for httpd
+
+- package: 
+      name: "{{ software_name }}"
+      state: present
+- template:
+      dest: "/var/www/html/index.html"
+      src: "index.html"
+- service: 
+      name: "{{ service_name }}"
+      state: started
+
