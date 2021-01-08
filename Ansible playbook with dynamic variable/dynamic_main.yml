@@ -1,6 +1,6 @@
 - hosts: all
   vars_files:
-    - "{{ ansible_facts['distribution'] }}-{{ ansible_facts['distribution_major_version'] }}"
+    - "{{ ansible_facts['distribution'] }}-{{ ansible_facts['distribution_major_version'] }}.yml"
   tasks:
   - name: Installing  apache software
     package:
